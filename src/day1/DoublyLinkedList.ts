@@ -1,9 +1,30 @@
+type Node<T> = {
+    value: T;
+    prev?: Node<T>;
+    next?: Node<T>;
+};
 export default class DoublyLinkedList<T> {
     public length: number;
+    private head?: Node<T>;
+    private tail?: Node<T>;
 
-    constructor() {}
+    constructor() {
+        this.length = 0;
+        this.head = undefined;
+        this.tail = undefined;
+    }
 
-    prepend(item: T): void {}
+    prepend(item: T): void {
+        this.length++;
+        const node = { value: item } as Node<T>;
+        if (!this.head) {
+            this.head = this.tail = node;
+            return;
+        }
+        node.next = this.head;
+        this.head.prev = node;
+        this.head = node;
+    }
     insertAt(item: T, idx: number): void {
         if (idx > this.length) {
             throw new Error("Ooooh Nooo ");
@@ -53,5 +74,39 @@ export default class DoublyLinkedList<T> {
     get(idx: number): T | undefined {
         return this.getAt(idx)?.value;
     }
-    removeAt(idx: number): T | undefined {}
+    removeAt(idx: number): T | undefined {
+        const node = this.getAt(idx);
+        if (!node) {
+            return undefined;
+        }
+        return this.removeNode(node);
+    }
+    private removeNode(node: Node<T>): T | undefined {
+        this.length--;
+        if (this.length === 0) {
+            const out = this.head?.value;
+            this.head = this.tail = undefined;
+        }
+        if (node.prev) {
+            node.prev.next = node.next;
+        }
+        if (node.next) {
+            node.next.prev = node.prev;
+        }
+        if (node === this.head) {
+            this.head = node.next;
+        }
+        if (node === this.tail) {
+            this.tail = node.prev;
+        }
+        node.prev = node.next = undefined;
+        return node.value;
+    }
+    private getAt(idx: number): Node<T> | undefined {
+        let curr = this.head;
+        for (let i = 0; curr && i < idx; ++i) {
+            curr = curr.next;
+        }
+        return curr;
+    }
 }
