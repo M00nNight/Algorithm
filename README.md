@@ -1,5 +1,5 @@
-## Developed live on twitch
-[ThePrimeagen](https://twitch.tv/ThePrimeagen)
+## Developed 
+TypeScript with love ❤️
 
 ## Naming
 ### Lig-Machine
